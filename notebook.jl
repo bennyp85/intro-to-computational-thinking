@@ -567,8 +567,8 @@ md"""
 
 # ╔═╡ 21a5885d-00ab-428b-96c3-c28c98c4ca6d
 function noisify(image::AbstractMatrix, s)
-	# your code here!
-	return missing
+	result = [noisify(pixel, s) for pixel in image]
+	return result
 end
 
 # ╔═╡ 1ea53f41-b791-40e2-a0f8-04e13d856829
@@ -593,7 +593,7 @@ Move the slider below to set the amount of noise applied to the image of Philip.
 """
 
 # ╔═╡ e70a84d4-ee0c-11ea-0640-bf78653ba102
-@bind philip_noise Slider(0:0.01:1, show_value=true)
+@bind philip_noise Slider(0:0.01:10, show_value=true)
 
 # ╔═╡ ac15e0d0-ee0c-11ea-1eaf-d7f88b5df1d7
 noisify(philip_head, philip_noise)
@@ -619,7 +619,7 @@ You may need noise intensities larger than 1. Why?
 
 # ╔═╡ bdc2df7c-ee0c-11ea-2e9f-7d2c085617c1
 answer_about_noise_intensity = md"""
-The image is unrecognisable with intensity ...
+The image is unrecognisable with intensity above 1.2
 """
 
 # ╔═╡ e87e0d14-43a5-490d-84d9-b14ece472061
@@ -629,10 +629,21 @@ md"""
 
 # ╔═╡ ee5f21fb-1076-42b6-8926-8bbb6ed0ad67
 function custom_filter(pixel::AbstractRGB)
-	
-	# your code here!
-	
-	return pixel
+    threshold = 0.2  # Define your threshold for darkness
+    brightness_boost = 0.1  # Amount by which to increase brightness
+
+    # Calculate the intensity of the pixel
+    intensity = (pixel.r + pixel.g + pixel.b) / 3.0
+
+    # If the pixel is dark, brighten it
+    if intensity < threshold
+        new_pixel = RGB(clamp(pixel.r + brightness_boost, 0.0, 1.0), 
+                        clamp(pixel.g + brightness_boost, 0.0, 1.0), 
+                        clamp(pixel.b + brightness_boost, 0.0, 1.0))
+        return new_pixel
+    else
+        return pixel  # If not dark, return the original pixel
+    end
 end
 
 # ╔═╡ 9e5a08dd-332a-486b-94ab-15c49e72e522
