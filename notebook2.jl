@@ -130,11 +130,15 @@ A better solution is to use the *closest* value that is inside the vector. Effec
 👉 Write a function `extend(v, i)` that checks whether the position $i$ is inside `1:n`. If so, return the $(HTML("<br>")) ``i``th component of `v`; otherwise, return the nearest end value.
 """
 
-# ╔═╡ 802bec56-ee09-11ea-043e-51cf1db02a34
-function extend(v::AbstractVector, i)
-	
-	return missing
-end
+# ╔═╡ 826b297d-fc2e-4576-bd73-5efd8ce1daaf
+md"""
+### My answer
+"""
+
+# ╔═╡ 16c7723d-7db6-4f20-a06b-a50113d9d47d
+md"""
+### ChatGPT's answer
+"""
 
 # ╔═╡ b7f3994c-ee1b-11ea-211a-d144db8eafc2
 md"_Some test cases:_"
@@ -1023,6 +1027,36 @@ sobel_camera_image = Gray.(process_raw_camera_data(sobel_raw_camera_data));
 
 # ╔═╡ 1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
 Gray.(with_sobel_edge_detect(sobel_camera_image))
+
+# ╔═╡ 802bec56-ee09-11ea-043e-51cf1db02a34
+# ╠═╡ disabled = true
+#=╠═╡
+function extend(v::AbstractVector, i)
+	if i in v
+		result = i
+	else
+		nearest = Inf
+		for value in v
+			current_nearest = abs(value - i)
+			if current_nearest < nearest
+				nearest = value
+			end
+		end
+	end
+	return nearest
+end
+  ╠═╡ =#
+
+# ╔═╡ 38e4cdb8-6a1e-4695-a128-fa434741c63b
+function extend(v::AbstractVector, i)
+    if i in v
+        return i
+    else
+        nearest_val, _ = findmin(abs.(v .- i))
+        return nearest_val[_]
+    end
+end
+
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2175,7 +2209,10 @@ version = "17.4.0+0"
 # ╟─ff70782e-e8d2-4281-9b24-d45c925f55e2
 # ╟─7522f81e-ee1c-11ea-35af-a17eb257ff1a
 # ╟─801d90c0-ee09-11ea-28d6-61b806de26dc
+# ╟─826b297d-fc2e-4576-bd73-5efd8ce1daaf
 # ╠═802bec56-ee09-11ea-043e-51cf1db02a34
+# ╟─16c7723d-7db6-4f20-a06b-a50113d9d47d
+# ╠═38e4cdb8-6a1e-4695-a128-fa434741c63b
 # ╟─b7f3994c-ee1b-11ea-211a-d144db8eafc2
 # ╠═803905b2-ee09-11ea-2d52-e77ff79693b0
 # ╠═80479d98-ee09-11ea-169e-d166eef65874
