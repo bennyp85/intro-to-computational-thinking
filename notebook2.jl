@@ -165,10 +165,20 @@ md"""
 
 """
 
-# ╔═╡ 5fdc5d0d-a52c-476e-b3b5-3b6364b706e4
+# ╔═╡ 24de24fc-420c-47b1-a607-61a716da07ac
+function my_sum(v)
+    result = 0
+    for elem in v
+        result += elem
+    end
+    return result
+end
+
+# ╔═╡ cb75cc33-574e-400b-a6cc-d4f6d4a0a8e2
 function mean(v)
-	
-	return missing
+    sum = my_sum(v)
+    result = sum / length(v)
+    return result
 end
 
 # ╔═╡ e84c9cc2-e6e1-46f1-bf4e-9605da5e6f4a
@@ -179,31 +189,6 @@ md"""
 Return a vector of the same size as `v`.
 """
 
-# ╔═╡ 807e5662-ee09-11ea-3005-21fdcc36b023
-function box_blur(v::AbstractArray, l)
-	
-	return missing
-end
-
-# ╔═╡ 4f08ebe8-b781-4a32-a218-5ecd8338561d
-colored_line(box_blur(example_vector, 1))
-
-# ╔═╡ 808deca8-ee09-11ea-0ee3-1586fa1ce282
-let
-	try
-		test_v = rand(n)
-		original = copy(test_v)
-		box_blur(test_v, 5)
-		if test_v != original
-			md"""
-			!!! danger "Oopsie!"
-			    It looks like your function _modifies_ `v`. Can you write it without doing so? Maybe you can use `copy`.
-			"""
-		end
-	catch
-	end
-end
-
 # ╔═╡ 809f5330-ee09-11ea-0e5b-415044b6ac1f
 md"""
 #### Exercise 1.4
@@ -211,13 +196,11 @@ md"""
 """
 
 # ╔═╡ e555a7e6-f11a-43ac-8218-6d832f0ce251
-
-
-# ╔═╡ 302f0842-453f-47bd-a74c-7942d8c96485
-
-
-# ╔═╡ 7d80a1ea-a0a9-41b2-9cfe-a334717ab2f4
-
+begin
+	md"""
+	$(@bind l_box Slider(1:6, default=1, show_value=true))
+	"""
+end
 
 # ╔═╡ 80ab64f4-ee09-11ea-29b4-498112ed0799
 md"""
@@ -267,12 +250,6 @@ box_blur_kernel_test = box_blur_kernel(box_kernel_l)
 md"""
 Let's apply your kernel to our test vector `v` (first cell), and compare the result to our previous box blur function (second cell). The two should be identical.
 """
-
-# ╔═╡ bbe1a562-8d97-4112-a88a-c45c260f574d
-let
-	result = box_blur(v, box_kernel_l)
-	colored_line(result)
-end
 
 # ╔═╡ 03f91a22-1c3e-4c42-9d78-1ee36851a120
 md"""
@@ -371,6 +348,49 @@ if extend(v,1) === missing
 	missing
 else
 	colored_line([extend(example_vector, i) for i in -1:length(example_vector)+2])
+end
+
+# ╔═╡ 807e5662-ee09-11ea-3005-21fdcc36b023
+function box_blur(v::AbstractArray, l)
+    result_vector = []
+    # find the mean of the windows from -l to l
+    # use extend for the boundaries
+    for i in 1:length(v)
+        window = []
+        for j in -l:l
+            push!(window, extend(v, i + j))
+        end
+        push!(result_vector, mean(window))
+    end
+	return result_vector
+end
+
+# ╔═╡ 4f08ebe8-b781-4a32-a218-5ecd8338561d
+colored_line(box_blur(example_vector, 4))
+
+# ╔═╡ 808deca8-ee09-11ea-0ee3-1586fa1ce282
+let
+	try
+		test_v = rand(n)
+		original = copy(test_v)
+		box_blur(test_v, 5)
+		if test_v != original
+			md"""
+			!!! danger "Oopsie!"
+			    It looks like your function _modifies_ `v`. Can you write it without doing so? Maybe you can use `copy`.
+			"""
+		end
+	catch
+	end
+end
+
+# ╔═╡ 302f0842-453f-47bd-a74c-7942d8c96485
+colored_line(box_blur(example_vector, l_box))
+
+# ╔═╡ bbe1a562-8d97-4112-a88a-c45c260f574d
+let
+	result = box_blur(v, box_kernel_l)
+	colored_line(result)
 end
 
 # ╔═╡ 9afc4dca-ee16-11ea-354f-1d827aaa61d2
@@ -2225,7 +2245,8 @@ version = "17.4.0+0"
 # ╟─9bde9f92-ee0f-11ea-27f8-ffef5fce2b3c
 # ╟─45c4da9a-ee0f-11ea-2c5b-1f6704559137
 # ╟─431ba330-0f72-416a-92e9-55f51ff3bcd1
-# ╠═5fdc5d0d-a52c-476e-b3b5-3b6364b706e4
+# ╠═24de24fc-420c-47b1-a607-61a716da07ac
+# ╠═cb75cc33-574e-400b-a6cc-d4f6d4a0a8e2
 # ╟─e84c9cc2-e6e1-46f1-bf4e-9605da5e6f4a
 # ╠═807e5662-ee09-11ea-3005-21fdcc36b023
 # ╠═4f08ebe8-b781-4a32-a218-5ecd8338561d
@@ -2233,7 +2254,6 @@ version = "17.4.0+0"
 # ╟─809f5330-ee09-11ea-0e5b-415044b6ac1f
 # ╠═e555a7e6-f11a-43ac-8218-6d832f0ce251
 # ╠═302f0842-453f-47bd-a74c-7942d8c96485
-# ╠═7d80a1ea-a0a9-41b2-9cfe-a334717ab2f4
 # ╟─ea435e58-ee11-11ea-3785-01af8dd72360
 # ╟─80ab64f4-ee09-11ea-29b4-498112ed0799
 # ╠═28e20950-ee0c-11ea-0e0a-b5f2e570b56e

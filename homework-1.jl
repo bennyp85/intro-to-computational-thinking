@@ -33,3 +33,48 @@ function noisify(image::AbstractMatrix, s)
     result = [noisify(pixel, s) for pixel in image]
     return result
 end
+
+# Write a function box_blur(v, l) that blurs a vector v with a window of length l by averaging the elements within a window from 
+#     to 
+#    . This is called a box blur. Use your function extend to handle the boundaries correctly.
+
+#    Return a vector of the same size as v.
+
+
+
+function extend(v::AbstractVector, i)
+    if i in v
+        return i
+    else
+        nearest_val, _ = findmin(abs.(v .- i))
+        return nearest_val[_]
+    end
+end
+
+function mean(v)
+    sum = my_sum(v)
+    result = sum / length(v)
+    return result
+end
+
+function my_sum(v)
+    result = 0
+    for elem in v
+        result += elem
+    end
+    return result
+end
+
+
+function box_blur(v::AbstractArray, l)
+    result_vector = []
+    # find the mean of the windows from -l to l
+    # use extend for the boundaries
+    for i in 1:length(v)
+        window = []
+        for j in -l:l
+            push!(window, extend(v, i + j))
+        end
+        push!(result_vector, mean(window))
+    end
+end
