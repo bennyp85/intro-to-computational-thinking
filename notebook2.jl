@@ -242,9 +242,10 @@ md"""
 
 # ╔═╡ 8a7d3cfd-6f19-43f0-ae16-d5a236f148e7
 function box_blur_kernel(l)
-
-    return missing
+    return fill(1/(2 * l + 1), 2 * l + 1)
 end
+
+
 
 # ╔═╡ a34d1ad8-3776-4bc4-93e5-72cfffc54f15
 @bind box_kernel_l Slider(1:5)
@@ -403,7 +404,7 @@ end
 function convolve(v::AbstractVector, k::AbstractVector)
     v_length = length(v)
     k_length = length(k)
-    offset = k_length ÷ 2
+    offset = floor(k_length ÷ 2)
     result_vector = []
     
     for i in 1:v_length
@@ -2258,7 +2259,7 @@ version = "17.4.0+0"
 # ╠═7ffd14f8-ee1d-11ea-0343-b54fb0333aea
 # ╟─fa463b71-5aa4-44a3-a67b-6b0776236243
 # ╠═8a7d3cfd-6f19-43f0-ae16-d5a236f148e7
-# ╟─a34d1ad8-3776-4bc4-93e5-72cfffc54f15
+# ╠═a34d1ad8-3776-4bc4-93e5-72cfffc54f15
 # ╠═971a801d-9c46-417a-ad31-1144894fb4e1
 # ╟─5f13b1a5-8c7d-47c9-b96a-a09faf38fe5e
 # ╠═338b1c3f-f071-4f80-86c0-a82c17349828
