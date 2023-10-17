@@ -26,10 +26,10 @@ end
 
 # ╔═╡ 65780f00-ed6b-11ea-1ecf-8b35523a7ac0
 begin
-	using Images, ImageIO, FileIO
-	using PlutoUI
-	using HypertextLiteral
-	using OffsetArrays
+    using Images, ImageIO, FileIO
+    using PlutoUI
+    using HypertextLiteral
+    using OffsetArrays
 end
 
 # ╔═╡ 83eb9ca0-ed68-11ea-0bc5-99a09c68f867
@@ -53,7 +53,7 @@ Feel free to ask questions!
 # ╔═╡ 911ccbce-ed68-11ea-3606-0384e7580d7c
 # edit the code below to set your name and kerberos ID (i.e. email without @mit.edu)
 
-student = (name = "Jazzy Doe", kerberos_id = "jazz")
+student = (name="Jazzy Doe", kerberos_id="jazz")
 
 # press the ▶ button in the bottom right of this cell to run your edits
 # or use Shift+Enter
@@ -110,8 +110,8 @@ Let's use the function `colored_line` to view this 1D number array as a 1D image
 
 # ╔═╡ ff70782e-e8d2-4281-9b24-d45c925f55e2
 begin
-	colored_line(x::Vector) = hcat(Gray.(Float64.(x)))'
-	colored_line(x::Any) = nothing
+    colored_line(x::Vector) = hcat(Gray.(Float64.(x)))'
+    colored_line(x::Any) = nothing
 end
 
 # ╔═╡ 01070e28-ee0f-11ea-1928-a7919d452bdd
@@ -134,6 +134,18 @@ A better solution is to use the *closest* value that is inside the vector. Effec
 md"""
 ### My answer
 """
+
+# ╔═╡ 802bec56-ee09-11ea-043e-51cf1db02a34
+function extend(v::AbstractVector, i::Int)
+    if i <= 0
+        return v[1]
+    elseif i > length(v)
+        return v[end]
+    else
+        return v[i]
+    end
+end
+
 
 # ╔═╡ 16c7723d-7db6-4f20-a06b-a50113d9d47d
 md"""
@@ -197,9 +209,9 @@ md"""
 
 # ╔═╡ e555a7e6-f11a-43ac-8218-6d832f0ce251
 begin
-	md"""
-	$(@bind l_box Slider(1:6, default=1, show_value=true))
-	"""
+    md"""
+    $(@bind l_box Slider(1:6, default=1, show_value=true))
+    """
 end
 
 # ╔═╡ 80ab64f4-ee09-11ea-29b4-498112ed0799
@@ -218,12 +230,6 @@ Again, we need to take care about what happens if $v_{i -m }$ falls off the end 
    You will either need to do the necessary manipulation of indices by hand, or use the `OffsetArrays.jl` package.
 """
 
-# ╔═╡ 28e20950-ee0c-11ea-0e0a-b5f2e570b56e
-function convolve(v::AbstractVector, k)
-	
-	return missing
-end
-
 # ╔═╡ cf73f9f8-ee12-11ea-39ae-0107e9107ef5
 md"_Edit the cell above, or create a new cell with your own test cases!_"
 
@@ -236,8 +242,8 @@ md"""
 
 # ╔═╡ 8a7d3cfd-6f19-43f0-ae16-d5a236f148e7
 function box_blur_kernel(l)
-	
-	return missing
+
+    return missing
 end
 
 # ╔═╡ a34d1ad8-3776-4bc4-93e5-72cfffc54f15
@@ -269,7 +275,7 @@ Write a function `gauss` that takes `σ` as a keyword argument and implements th
 """
 
 # ╔═╡ beb62fda-38a6-4528-a176-cfb726f4b5bd
-gauss(x::Real; σ=1) = 1 / sqrt(2π*σ^2) * exp(-x^2 / (2 * σ^2))
+gauss(x::Real; σ=1) = 1 / sqrt(2π * σ^2) * exp(-x^2 / (2 * σ^2))
 
 # ╔═╡ f0d55cec-2e81-4cbb-b166-2cf4f2a0f43f
 md"""
@@ -278,9 +284,9 @@ and then **normalize** so that the sum of the resulting kernel is 1.
 """
 
 # ╔═╡ 1c8b4658-ee0c-11ea-2ede-9b9ed7d3125e
-function gaussian_kernel_1D(n; σ = 1)
-	
-	return missing
+function gaussian_kernel_1D(n; σ=1)
+
+    return missing
 end
 
 # ╔═╡ a6149507-d5ba-45c1-896a-3487070d36ec
@@ -298,9 +304,9 @@ Let's try applying it in a convolution.
 
 # ╔═╡ ce24e486-df27-4780-bc57-d3bf7bee83bb
 function create_bar()
-	x = zeros(100)
-	x[41:60] .= 1
-	x
+    x = zeros(100)
+    x[41:60] .= 1
+    x
 end
 
 # ╔═╡ b01858b6-edf3-11ea-0826-938d33c19a43
@@ -330,24 +336,24 @@ md"""
 
 # ╔═╡ 7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
 function extend(M::AbstractMatrix, i, j)
-	
-	return missing
+
+    return missing
 end
 
 # ╔═╡ 803905b2-ee09-11ea-2d52-e77ff79693b0
-extend([5,6,7], 1)
+extend([5, 6, 7], 1)
 
 # ╔═╡ 80479d98-ee09-11ea-169e-d166eef65874
-extend([5,6,7], -8)
+extend([5, 6, 7], -8)
 
 # ╔═╡ 805691ce-ee09-11ea-053d-6d2e299ee123
-extend([5,6,7], 10)
+extend([5, 6, 7], 10)
 
 # ╔═╡ 45c4da9a-ee0f-11ea-2c5b-1f6704559137
-if extend(v,1) === missing
-	missing
+if extend(v, 1) === missing
+    missing
 else
-	colored_line([extend(example_vector, i) for i in -1:length(example_vector)+2])
+    colored_line([extend(example_vector, i) for i in -1:length(example_vector)+2])
 end
 
 # ╔═╡ 807e5662-ee09-11ea-3005-21fdcc36b023
@@ -362,7 +368,7 @@ function box_blur(v::AbstractArray, l)
         end
         push!(result_vector, mean(window))
     end
-	return result_vector
+    return result_vector
 end
 
 # ╔═╡ 4f08ebe8-b781-4a32-a218-5ecd8338561d
@@ -370,18 +376,18 @@ colored_line(box_blur(example_vector, 4))
 
 # ╔═╡ 808deca8-ee09-11ea-0ee3-1586fa1ce282
 let
-	try
-		test_v = rand(n)
-		original = copy(test_v)
-		box_blur(test_v, 5)
-		if test_v != original
-			md"""
-			!!! danger "Oopsie!"
-			    It looks like your function _modifies_ `v`. Can you write it without doing so? Maybe you can use `copy`.
-			"""
-		end
-	catch
-	end
+    try
+        test_v = rand(n)
+        original = copy(test_v)
+        box_blur(test_v, 5)
+        if test_v != original
+            md"""
+            !!! danger "Oopsie!"
+                It looks like your function _modifies_ `v`. Can you write it without doing so? Maybe you can use `copy`.
+            """
+        end
+    catch
+    end
 end
 
 # ╔═╡ 302f0842-453f-47bd-a74c-7942d8c96485
@@ -389,21 +395,40 @@ colored_line(box_blur(example_vector, l_box))
 
 # ╔═╡ bbe1a562-8d97-4112-a88a-c45c260f574d
 let
-	result = box_blur(v, box_kernel_l)
-	colored_line(result)
+    result = box_blur(v, box_kernel_l)
+    colored_line(result)
+end
+
+# ╔═╡ fa76cd73-a5be-48a7-9d1c-120d5dc40033
+function convolve(v::AbstractVector, k::AbstractVector)
+    v_length = length(v)
+    k_length = length(k)
+    offset = k_length ÷ 2
+    result_vector = []
+    
+    for i in 1:v_length
+        window = []
+        for j in -offset:offset
+            push!(window, extend(v, i + j))
+        end
+        conv_result = dot(window, k)
+        push!(result_vector, conv_result)
+    end
+    
+    return result_vector
 end
 
 # ╔═╡ 9afc4dca-ee16-11ea-354f-1d827aaa61d2
 md"_Let's test it!_"
 
 # ╔═╡ cf6b05e2-ee16-11ea-3317-8919565cb56e
-small_image = Gray.(rand(5,5))
+small_image = Gray.(rand(5, 5))
 
 # ╔═╡ e3616062-ee27-11ea-04a9-b9ec60842a64
 md"- Extended with `0`:"
 
 # ╔═╡ e5b6cd34-ee27-11ea-0d60-bd4796540b18
-[get(small_image, (i, j), Gray(0)) for (i,j) in Iterators.product(-1:7,-1:7)]
+[get(small_image, (i, j), Gray(0)) for (i, j) in Iterators.product(-1:7, -1:7)]
 
 # ╔═╡ b4e98589-f221-4922-b11e-364d72d0788e
 
@@ -412,7 +437,7 @@ md"- Extended with `0`:"
 md"- Extended with your `extend` function:"
 
 # ╔═╡ e1dc0622-ee16-11ea-274a-3b6ec9e15ab5
-[extend(small_image, i, j) for (i,j) in Iterators.product(-1:7,-1:7)]
+[extend(small_image, i, j) for (i, j) in Iterators.product(-1:7, -1:7)]
 
 # ╔═╡ 4bbea325-35f8-4a51-bd66-153aba4aed96
 md"""
@@ -420,7 +445,7 @@ md"""
 """
 
 # ╔═╡ c4f5a867-74ba-4106-91d4-195f6ae644d0
-url = "https://user-images.githubusercontent.com/6933510/107239146-dcc3fd00-6a28-11eb-8c7b-41aaf6618935.png" 
+url = "https://user-images.githubusercontent.com/6933510/107239146-dcc3fd00-6a28-11eb-8c7b-41aaf6618935.png"
 
 # ╔═╡ c825ebe2-511b-43ba-afdf-6226dbac48d2
 philip_filename = download(url) # download to a local file. The filename is returned
@@ -433,9 +458,9 @@ philip_head = philip[470:800, 140:410];
 
 # ╔═╡ 3cd535e4-ee26-11ea-2482-fb4ad43dda19
 [
-	extend(philip_head, i, j) for 
-		i in -50:size(philip_head,1)+51,
-		j in -50:size(philip_head,2)+51
+    extend(philip_head, i, j) for
+    i in -50:size(philip_head, 1)+51,
+    j in -50:size(philip_head, 2)+51
 ]
 
 # ╔═╡ 7c41f0ca-ee15-11ea-05fb-d97a836659af
@@ -446,15 +471,15 @@ md"""
 
 # ╔═╡ 8b96e0bc-ee15-11ea-11cd-cfecea7075a0
 function convolve(M::AbstractMatrix, K::AbstractMatrix)
-	
-	return missing
+
+    return missing
 end
 
 # ╔═╡ 93284f92-ee12-11ea-0342-833b1a30625c
 test_convolution = let
-	v = [1, 10, 100, 1000, 10000]
-	k = [1, 1, 0]
-	convolve(v, k)
+    v = [1, 10, 100, 1000, 10000]
+    k = [1, 1, 0]
+    convolve(v, k)
 end
 
 # ╔═╡ 5eea882c-ee13-11ea-0d56-af81ecd30a4a
@@ -462,17 +487,17 @@ colored_line(test_convolution)
 
 # ╔═╡ 338b1c3f-f071-4f80-86c0-a82c17349828
 let
-	result = convolve(v, box_blur_kernel_test)
-	colored_line(result)
+    result = convolve(v, box_blur_kernel_test)
+    colored_line(result)
 end
 
 # ╔═╡ 38eb92f6-ee13-11ea-14d7-a503ac04302e
 test_gauss_1D_a = let
-	k = gaussian_kernel_1D(gaussian_kernel_size_1D)
-	
-	if k !== missing
-		convolve(v, k)
-	end
+    k = gaussian_kernel_1D(gaussian_kernel_size_1D)
+
+    if k !== missing
+        convolve(v, k)
+    end
 end
 
 # ╔═╡ b424e2aa-ee14-11ea-33fa-35491e0b9c9d
@@ -480,12 +505,12 @@ colored_line(test_gauss_1D_a)
 
 # ╔═╡ 24c21c7c-ee14-11ea-1512-677980db1288
 test_gauss_1D_b = let
-	v = create_bar()
-	k = gaussian_kernel_1D(gaussian_kernel_size_1D)
-	
-	if k !== missing
-		convolve(v, k)
-	end
+    v = create_bar()
+    k = gaussian_kernel_1D(gaussian_kernel_size_1D)
+
+    if k !== missing
+        convolve(v, k)
+    end
 end
 
 # ╔═╡ bc1c20a4-ee14-11ea-3525-63c9fa78f089
@@ -495,13 +520,13 @@ colored_line(test_gauss_1D_b)
 md"_Let's test it out! 🎃_"
 
 # ╔═╡ 577c6daa-ee1e-11ea-1275-b7abc7a27d73
-test_image_with_border = [get(small_image, (i, j), Gray(0)) for (i,j) in Iterators.product(-1:7,-1:7)]
+test_image_with_border = [get(small_image, (i, j), Gray(0)) for (i, j) in Iterators.product(-1:7, -1:7)]
 
 # ╔═╡ 275a99c8-ee1e-11ea-0a76-93e3618c9588
 K_test = [
-	0   0  0
-	1/2 0  1/2
-	0   0  0
+    0 0 0
+    1/2 0 1/2
+    0 0 0
 ]
 
 # ╔═╡ 42dfa206-ee1e-11ea-1fcd-21671042064c
@@ -533,7 +558,7 @@ How can you express this mathematically using the 1D Gaussian function that we d
 """
 
 # ╔═╡ f4d9fd6f-0f1b-4dec-ae68-e61550cee790
-gauss(x, y; σ=1) = 2π*σ^2 * gauss(x; σ=σ) * gauss(y; σ=σ)
+gauss(x, y; σ=1) = 2π * σ^2 * gauss(x; σ=σ) * gauss(y; σ=σ)
 
 # ╔═╡ 7c50ea80-ee15-11ea-328f-6b4e4ff20b7e
 md"""
@@ -542,8 +567,8 @@ md"""
 
 # ╔═╡ aad67fd0-ee15-11ea-00d4-274ec3cda3a3
 function with_gaussian_blur(image; σ=3, l=5)
-	
-	return missing
+
+    return missing
 end
 
 # ╔═╡ 8ae59674-ee18-11ea-3815-f50713d0fa08
@@ -594,16 +619,16 @@ Use your previous functions, and add cells to write helper functions as needed!
 
 # ╔═╡ 9eeb876c-ee15-11ea-1794-d3ea79f47b75
 function with_sobel_edge_detect(image)
-	
-	return missing
+
+    return missing
 end
 
 # ╔═╡ 8ffe16ce-ee20-11ea-18bd-15640f94b839
 if student.kerberos_id === "jazz"
-	md"""
-!!! danger "Oops!"
-    **Before you submit**, remember to fill in your name and kerberos ID at the top of this notebook!
-	"""
+    md"""
+   !!! danger "Oops!"
+       **Before you submit**, remember to fill in your name and kerberos ID at the top of this notebook!
+   	"""
 end
 
 # ╔═╡ 2d9f3ae4-9e4c-49ce-aab0-5f87aba85c3e
@@ -656,23 +681,23 @@ correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!",
 
 # ╔═╡ f0c3e99d-9eb9-459e-917a-c2338af6683c
 let
-	result = gaussian_kernel_1D(5)
-	
-	if ismissing(result)
-		still_missing()
-	elseif isnothing(result)
-		keep_working(md"Did you forget to write `return`?")
-	elseif !(result isa AbstractVector)
-		keep_working(md"The returned object is not a `Vector`.")
-	elseif size(result) != (11,)
-		hint(md"The returned vector has the wrong dimensions.")
-	elseif !(sum(result) ≈ 1.0)
-		keep_working(md"You need to _normalize_ the result.")
-	elseif gaussian_kernel_1D(3; σ=1) == gaussian_kernel_1D(3; σ=2)
-		keep_working(md"Use the keyword argument `σ` in your function.")
-	else
-		correct()
-	end
+    result = gaussian_kernel_1D(5)
+
+    if ismissing(result)
+        still_missing()
+    elseif isnothing(result)
+        keep_working(md"Did you forget to write `return`?")
+    elseif !(result isa AbstractVector)
+        keep_working(md"The returned object is not a `Vector`.")
+    elseif size(result) != (11,)
+        hint(md"The returned vector has the wrong dimensions.")
+    elseif !(sum(result) ≈ 1.0)
+        keep_working(md"You need to _normalize_ the result.")
+    elseif gaussian_kernel_1D(3; σ=1) == gaussian_kernel_1D(3; σ=2)
+        keep_working(md"Use the keyword argument `σ` in your function.")
+    else
+        correct()
+    end
 end
 
 # ╔═╡ 74d44e22-edee-11ea-09a0-69aa0aba3281
@@ -680,97 +705,97 @@ not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!"
 
 # ╔═╡ bcf98dfc-ee1b-11ea-21d0-c14439500971
 if !@isdefined(extend)
-	not_defined(:extend)
+    not_defined(:extend)
 else
-	let
-		result = extend([6,7],-10)
+    let
+        result = extend([6, 7], -10)
 
-		if ismissing(result)
-			still_missing()
-		elseif isnothing(result)
-			keep_working(md"Did you forget to write `return`?")
-		elseif result != 6 || extend([6,7],10) != 7
-			keep_working()
-		else
-			correct()
-		end
-	end
+        if ismissing(result)
+            still_missing()
+        elseif isnothing(result)
+            keep_working(md"Did you forget to write `return`?")
+        elseif result != 6 || extend([6, 7], 10) != 7
+            keep_working()
+        else
+            correct()
+        end
+    end
 end
 
 # ╔═╡ 7ffd14f8-ee1d-11ea-0343-b54fb0333aea
 if !@isdefined(convolve)
-	not_defined(:convolve)
+    not_defined(:convolve)
 else
-	let
-		x = [1, 10, 100]
-		result = convolve(x, [0, 1, 1])
-		shouldbe = [11, 110, 200]
-		shouldbe2 = [2, 11, 110]
+    let
+        x = [1, 10, 100]
+        result = convolve(x, [0, 1, 1])
+        shouldbe = [11, 110, 200]
+        shouldbe2 = [2, 11, 110]
 
-		if ismissing(result)
-			still_missing()
-		elseif isnothing(result)
-			keep_working(md"Did you forget to write `return`?")
-		elseif !(result isa AbstractVector)
-			keep_working(md"The returned object is not a `Vector`.")
-		elseif size(result) != size(x)
-			keep_working(md"The returned vector has the wrong dimensions.")
-		elseif result != shouldbe && result != shouldbe2
-			keep_working()
-		else
-			correct()
-		end
-	end
+        if ismissing(result)
+            still_missing()
+        elseif isnothing(result)
+            keep_working(md"Did you forget to write `return`?")
+        elseif !(result isa AbstractVector)
+            keep_working(md"The returned object is not a `Vector`.")
+        elseif size(result) != size(x)
+            keep_working(md"The returned vector has the wrong dimensions.")
+        elseif result != shouldbe && result != shouldbe2
+            keep_working()
+        else
+            correct()
+        end
+    end
 end
 
 # ╔═╡ d93fa3f6-c361-4dfd-a2ea-f38e682bcd6a
 if !@isdefined(box_blur_kernel)
-	not_defined(:box_blur_kernel)
+    not_defined(:box_blur_kernel)
 else
-	let
-		result = box_blur_kernel(2)
-		
-		if ismissing(result)
-			still_missing()
-		elseif isnothing(result)
-			keep_working(md"Did you forget to write `return`?")
-		elseif !(result isa AbstractVector)
-			keep_working(md"The returned object is not a `Vector`.")
-		elseif size(result) != (5,)
-			hint(md"The returned vector has the wrong dimensions.")
-		else
-			
-			x = [1, 10, 100]
-			result1 = box_blur(x, 2)
-			result2 = convolve(x, result)
-			
-			if result1 ≈ result2
-				correct()
-			else
-				keep_working()
-			end
-		end
-	end
+    let
+        result = box_blur_kernel(2)
+
+        if ismissing(result)
+            still_missing()
+        elseif isnothing(result)
+            keep_working(md"Did you forget to write `return`?")
+        elseif !(result isa AbstractVector)
+            keep_working(md"The returned object is not a `Vector`.")
+        elseif size(result) != (5,)
+            hint(md"The returned vector has the wrong dimensions.")
+        else
+
+            x = [1, 10, 100]
+            result1 = box_blur(x, 2)
+            result2 = convolve(x, result)
+
+            if result1 ≈ result2
+                correct()
+            else
+                keep_working()
+            end
+        end
+    end
 end
 
 # ╔═╡ efd1ceb4-ee1c-11ea-350e-f7e3ea059024
 if !@isdefined(extend)
-	not_defined(:extend)
+    not_defined(:extend)
 else
-	let
-		input = [42 37; 1 0]
-		result = extend(input, -2, -2)
+    let
+        input = [42 37; 1 0]
+        result = extend(input, -2, -2)
 
-		if ismissing(result)
-			still_missing()
-		elseif isnothing(result)
-			keep_working(md"Did you forget to write `return`?")
-		elseif result != 42 || extend(input, -1, 3) != 37
-			keep_working()
-		else
-			correct()
-		end
-	end
+        if ismissing(result)
+            still_missing()
+        elseif isnothing(result)
+            keep_working(md"Did you forget to write `return`?")
+        elseif result != 42 || extend(input, -1, 3) != 37
+            keep_working()
+        else
+            correct()
+        end
+    end
 end
 
 # ╔═╡ 115ded8c-ee0a-11ea-3493-89487315feb7
@@ -792,248 +817,248 @@ bigbreak
 bigbreak
 
 # ╔═╡ dfb7c6be-ee0d-11ea-194e-9758857f7b20
-function camera_input(;max_size=200, default_url="https://i.imgur.com/SUmi94P.png")
-"""
-<span class="pl-image waiting-for-permission">
-<style>
-	
-	.pl-image.popped-out {
-		position: fixed;
-		top: 0;
-		right: 0;
-		z-index: 5;
-	}
+function camera_input(; max_size=200, default_url="https://i.imgur.com/SUmi94P.png")
+    """
+    <span class="pl-image waiting-for-permission">
+    <style>
+    	
+    	.pl-image.popped-out {
+    		position: fixed;
+    		top: 0;
+    		right: 0;
+    		z-index: 5;
+    	}
 
-	.pl-image #video-container {
-		width: 250px;
-	}
+    	.pl-image #video-container {
+    		width: 250px;
+    	}
 
-	.pl-image video {
-		border-radius: 1rem 1rem 0 0;
-	}
-	.pl-image.waiting-for-permission #video-container {
-		display: none;
-	}
-	.pl-image #prompt {
-		display: none;
-	}
-	.pl-image.waiting-for-permission #prompt {
-		width: 250px;
-		height: 200px;
-		display: grid;
-		place-items: center;
-		font-family: monospace;
-		font-weight: bold;
-		text-decoration: underline;
-		cursor: pointer;
-		border: 5px dashed rgba(0,0,0,.5);
-	}
+    	.pl-image video {
+    		border-radius: 1rem 1rem 0 0;
+    	}
+    	.pl-image.waiting-for-permission #video-container {
+    		display: none;
+    	}
+    	.pl-image #prompt {
+    		display: none;
+    	}
+    	.pl-image.waiting-for-permission #prompt {
+    		width: 250px;
+    		height: 200px;
+    		display: grid;
+    		place-items: center;
+    		font-family: monospace;
+    		font-weight: bold;
+    		text-decoration: underline;
+    		cursor: pointer;
+    		border: 5px dashed rgba(0,0,0,.5);
+    	}
 
-	.pl-image video {
-		display: block;
-	}
-	.pl-image .bar {
-		width: inherit;
-		display: flex;
-		z-index: 6;
-	}
-	.pl-image .bar#top {
-		position: absolute;
-		flex-direction: column;
-	}
-	
-	.pl-image .bar#bottom {
-		background: black;
-		border-radius: 0 0 1rem 1rem;
-	}
-	.pl-image .bar button {
-		flex: 0 0 auto;
-		background: rgba(255,255,255,.8);
-		border: none;
-		width: 2rem;
-		height: 2rem;
-		border-radius: 100%;
-		cursor: pointer;
-		z-index: 7;
-	}
-	.pl-image .bar button#shutter {
-		width: 3rem;
-		height: 3rem;
-		margin: -1.5rem auto .2rem auto;
-	}
+    	.pl-image video {
+    		display: block;
+    	}
+    	.pl-image .bar {
+    		width: inherit;
+    		display: flex;
+    		z-index: 6;
+    	}
+    	.pl-image .bar#top {
+    		position: absolute;
+    		flex-direction: column;
+    	}
+    	
+    	.pl-image .bar#bottom {
+    		background: black;
+    		border-radius: 0 0 1rem 1rem;
+    	}
+    	.pl-image .bar button {
+    		flex: 0 0 auto;
+    		background: rgba(255,255,255,.8);
+    		border: none;
+    		width: 2rem;
+    		height: 2rem;
+    		border-radius: 100%;
+    		cursor: pointer;
+    		z-index: 7;
+    	}
+    	.pl-image .bar button#shutter {
+    		width: 3rem;
+    		height: 3rem;
+    		margin: -1.5rem auto .2rem auto;
+    	}
 
-	.pl-image video.takepicture {
-		animation: pictureflash 200ms linear;
-	}
+    	.pl-image video.takepicture {
+    		animation: pictureflash 200ms linear;
+    	}
 
-	@keyframes pictureflash {
-		0% {
-			filter: grayscale(1.0) contrast(2.0);
-		}
+    	@keyframes pictureflash {
+    		0% {
+    			filter: grayscale(1.0) contrast(2.0);
+    		}
 
-		100% {
-			filter: grayscale(0.0) contrast(1.0);
-		}
-	}
-</style>
+    		100% {
+    			filter: grayscale(0.0) contrast(1.0);
+    		}
+    	}
+    </style>
 
-	<div id="video-container">
-		<div id="top" class="bar">
-			<button id="stop" title="Stop video">✖</button>
-			<button id="pop-out" title="Pop out/pop in">⏏</button>
-		</div>
-		<video playsinline autoplay></video>
-		<div id="bottom" class="bar">
-		<button id="shutter" title="Click to take a picture">📷</button>
-		</div>
-	</div>
-		
-	<div id="prompt">
-		<span>
-		Enable webcam
-		</span>
-	</div>
+    	<div id="video-container">
+    		<div id="top" class="bar">
+    			<button id="stop" title="Stop video">✖</button>
+    			<button id="pop-out" title="Pop out/pop in">⏏</button>
+    		</div>
+    		<video playsinline autoplay></video>
+    		<div id="bottom" class="bar">
+    		<button id="shutter" title="Click to take a picture">📷</button>
+    		</div>
+    	</div>
+    		
+    	<div id="prompt">
+    		<span>
+    		Enable webcam
+    		</span>
+    	</div>
 
-<script>
-	// based on https://github.com/fonsp/printi-static (by the same author)
+    <script>
+    	// based on https://github.com/fonsp/printi-static (by the same author)
 
-	const span = currentScript.parentElement
-	const video = span.querySelector("video")
-	const popout = span.querySelector("button#pop-out")
-	const stop = span.querySelector("button#stop")
-	const shutter = span.querySelector("button#shutter")
-	const prompt = span.querySelector(".pl-image #prompt")
+    	const span = currentScript.parentElement
+    	const video = span.querySelector("video")
+    	const popout = span.querySelector("button#pop-out")
+    	const stop = span.querySelector("button#stop")
+    	const shutter = span.querySelector("button#shutter")
+    	const prompt = span.querySelector(".pl-image #prompt")
 
-	const maxsize = $(max_size)
+    	const maxsize = $(max_size)
 
-	const send_source = (source, src_width, src_height) => {
-		const scale = Math.min(1.0, maxsize / src_width, maxsize / src_height)
+    	const send_source = (source, src_width, src_height) => {
+    		const scale = Math.min(1.0, maxsize / src_width, maxsize / src_height)
 
-		const width = Math.floor(src_width * scale)
-		const height = Math.floor(src_height * scale)
+    		const width = Math.floor(src_width * scale)
+    		const height = Math.floor(src_height * scale)
 
-		const canvas = html`<canvas width=\${width} height=\${height}>`
-		const ctx = canvas.getContext("2d")
-		ctx.drawImage(source, 0, 0, width, height)
+    		const canvas = html`<canvas width=\${width} height=\${height}>`
+    		const ctx = canvas.getContext("2d")
+    		ctx.drawImage(source, 0, 0, width, height)
 
-		span.value = {
-			width: width,
-			height: height,
-			data: ctx.getImageData(0, 0, width, height).data,
-		}
-		span.dispatchEvent(new CustomEvent("input"))
-	}
-	
-	const clear_camera = () => {
-		window.stream.getTracks().forEach(s => s.stop());
-		video.srcObject = null;
+    		span.value = {
+    			width: width,
+    			height: height,
+    			data: ctx.getImageData(0, 0, width, height).data,
+    		}
+    		span.dispatchEvent(new CustomEvent("input"))
+    	}
+    	
+    	const clear_camera = () => {
+    		window.stream.getTracks().forEach(s => s.stop());
+    		video.srcObject = null;
 
-		span.classList.add("waiting-for-permission");
-	}
+    		span.classList.add("waiting-for-permission");
+    	}
 
-	prompt.onclick = () => {
-		navigator.mediaDevices.getUserMedia({
-			audio: false,
-			video: {
-				facingMode: "environment",
-			},
-		}).then(function(stream) {
+    	prompt.onclick = () => {
+    		navigator.mediaDevices.getUserMedia({
+    			audio: false,
+    			video: {
+    				facingMode: "environment",
+    			},
+    		}).then(function(stream) {
 
-			stream.onend = console.log
+    			stream.onend = console.log
 
-			window.stream = stream
-			video.srcObject = stream
-			window.cameraConnected = true
-			video.controls = false
-			video.play()
-			video.controls = false
+    			window.stream = stream
+    			video.srcObject = stream
+    			window.cameraConnected = true
+    			video.controls = false
+    			video.play()
+    			video.controls = false
 
-			span.classList.remove("waiting-for-permission");
+    			span.classList.remove("waiting-for-permission");
 
-		}).catch(function(error) {
-			console.log(error)
-		});
-	}
-	stop.onclick = () => {
-		clear_camera()
-	}
-	popout.onclick = () => {
-		span.classList.toggle("popped-out")
-	}
+    		}).catch(function(error) {
+    			console.log(error)
+    		});
+    	}
+    	stop.onclick = () => {
+    		clear_camera()
+    	}
+    	popout.onclick = () => {
+    		span.classList.toggle("popped-out")
+    	}
 
-	shutter.onclick = () => {
-		const cl = video.classList
-		cl.remove("takepicture")
-		void video.offsetHeight
-		cl.add("takepicture")
-		video.play()
-		video.controls = false
-		console.log(video)
-		send_source(video, video.videoWidth, video.videoHeight)
-	}
-	
-	
-	document.addEventListener("visibilitychange", () => {
-		if (document.visibilityState != "visible") {
-			clear_camera()
-		}
-	})
+    	shutter.onclick = () => {
+    		const cl = video.classList
+    		cl.remove("takepicture")
+    		void video.offsetHeight
+    		cl.add("takepicture")
+    		video.play()
+    		video.controls = false
+    		console.log(video)
+    		send_source(video, video.videoWidth, video.videoHeight)
+    	}
+    	
+    	
+    	document.addEventListener("visibilitychange", () => {
+    		if (document.visibilityState != "visible") {
+    			clear_camera()
+    		}
+    	})
 
 
-	// Set a default image
+    	// Set a default image
 
-	const img = html`<img crossOrigin="anonymous">`
+    	const img = html`<img crossOrigin="anonymous">`
 
-	img.onload = () => {
-	console.log("helloo")
-		send_source(img, img.width, img.height)
-	}
-	img.src = "$(default_url)"
-	console.log(img)
-</script>
-</span>
-""" |> HTML
+    	img.onload = () => {
+    	console.log("helloo")
+    		send_source(img, img.width, img.height)
+    	}
+    	img.src = "$(default_url)"
+    	console.log(img)
+    </script>
+    </span>
+    """ |> HTML
 end
 
 # ╔═╡ 94c0798e-ee18-11ea-3212-1533753eabb6
-@bind gauss_raw_camera_data camera_input(;max_size=100)
+@bind gauss_raw_camera_data camera_input(; max_size=100)
 
 # ╔═╡ 1a0324de-ee19-11ea-1d4d-db37f4136ad3
-@bind sobel_raw_camera_data camera_input(;max_size=200)
+@bind sobel_raw_camera_data camera_input(; max_size=200)
 
 # ╔═╡ e15ad330-ee0d-11ea-25b6-1b1b3f3d7888
 
 function process_raw_camera_data(raw_camera_data)
-	# the raw image data is a long byte array, we need to transform it into something
-	# more "Julian" - something with more _structure_.
-	
-	# The encoding of the raw byte stream is:
-	# every 4 bytes is a single pixel
-	# every pixel has 4 values: Red, Green, Blue, Alpha
-	# (we ignore alpha for this notebook)
-	
-	# So to get the red values for each pixel, we take every 4th value, starting at 
-	# the 1st:
-	reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
-	greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
-	blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
-	
-	# but these are still 1-dimensional arrays, nicknamed 'flat' arrays
-	# We will 'reshape' this into 2D arrays:
-	
-	width = raw_camera_data["width"]
-	height = raw_camera_data["height"]
-	
-	# shuffle and flip to get it in the right shape
-	reds = reshape(reds_flat, (width, height))' / 255.0
-	greens = reshape(greens_flat, (width, height))' / 255.0
-	blues = reshape(blues_flat, (width, height))' / 255.0
-	
-	# we have our 2D array for each color
-	# Let's create a single 2D array, where each value contains the R, G and B value of 
-	# that pixel
-	
-	RGB.(reds, greens, blues)
+    # the raw image data is a long byte array, we need to transform it into something
+    # more "Julian" - something with more _structure_.
+
+    # The encoding of the raw byte stream is:
+    # every 4 bytes is a single pixel
+    # every pixel has 4 values: Red, Green, Blue, Alpha
+    # (we ignore alpha for this notebook)
+
+    # So to get the red values for each pixel, we take every 4th value, starting at 
+    # the 1st:
+    reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
+    greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
+    blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
+
+    # but these are still 1-dimensional arrays, nicknamed 'flat' arrays
+    # We will 'reshape' this into 2D arrays:
+
+    width = raw_camera_data["width"]
+    height = raw_camera_data["height"]
+
+    # shuffle and flip to get it in the right shape
+    reds = reshape(reds_flat, (width, height))' / 255.0
+    greens = reshape(greens_flat, (width, height))' / 255.0
+    blues = reshape(blues_flat, (width, height))' / 255.0
+
+    # we have our 2D array for each color
+    # Let's create a single 2D array, where each value contains the R, G and B value of 
+    # that pixel
+
+    RGB.(reds, greens, blues)
 end
 
 # ╔═╡ f461f5f2-ee18-11ea-3d03-95f57f9bf09e
@@ -1047,36 +1072,6 @@ sobel_camera_image = Gray.(process_raw_camera_data(sobel_raw_camera_data));
 
 # ╔═╡ 1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
 Gray.(with_sobel_edge_detect(sobel_camera_image))
-
-# ╔═╡ 802bec56-ee09-11ea-043e-51cf1db02a34
-# ╠═╡ disabled = true
-#=╠═╡
-function extend(v::AbstractVector, i)
-	if i in v
-		result = i
-	else
-		nearest = Inf
-		for value in v
-			current_nearest = abs(value - i)
-			if current_nearest < nearest
-				nearest = value
-			end
-		end
-	end
-	return nearest
-end
-  ╠═╡ =#
-
-# ╔═╡ 38e4cdb8-6a1e-4695-a128-fa434741c63b
-function extend(v::AbstractVector, i)
-    if i in v
-        return i
-    else
-        nearest_val, _ = findmin(abs.(v .- i))
-        return nearest_val[_]
-    end
-end
-
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2232,12 +2227,11 @@ version = "17.4.0+0"
 # ╟─826b297d-fc2e-4576-bd73-5efd8ce1daaf
 # ╠═802bec56-ee09-11ea-043e-51cf1db02a34
 # ╟─16c7723d-7db6-4f20-a06b-a50113d9d47d
-# ╠═38e4cdb8-6a1e-4695-a128-fa434741c63b
 # ╟─b7f3994c-ee1b-11ea-211a-d144db8eafc2
 # ╠═803905b2-ee09-11ea-2d52-e77ff79693b0
 # ╠═80479d98-ee09-11ea-169e-d166eef65874
 # ╠═805691ce-ee09-11ea-053d-6d2e299ee123
-# ╟─bcf98dfc-ee1b-11ea-21d0-c14439500971
+# ╠═bcf98dfc-ee1b-11ea-21d0-c14439500971
 # ╠═3492b164-7065-48e8-978b-6c96b965d376
 # ╠═02123165-2a0a-49a8-b7a9-458955523511
 # ╟─806e5766-ee0f-11ea-1efc-d753cd83d086
@@ -2256,12 +2250,12 @@ version = "17.4.0+0"
 # ╠═302f0842-453f-47bd-a74c-7942d8c96485
 # ╟─ea435e58-ee11-11ea-3785-01af8dd72360
 # ╟─80ab64f4-ee09-11ea-29b4-498112ed0799
-# ╠═28e20950-ee0c-11ea-0e0a-b5f2e570b56e
+# ╠═fa76cd73-a5be-48a7-9d1c-120d5dc40033
 # ╟─32a07f1d-93cd-4bf3-bac1-91afa6bb88a6
-# ╟─5eea882c-ee13-11ea-0d56-af81ecd30a4a
+# ╠═5eea882c-ee13-11ea-0d56-af81ecd30a4a
 # ╠═93284f92-ee12-11ea-0342-833b1a30625c
 # ╟─cf73f9f8-ee12-11ea-39ae-0107e9107ef5
-# ╟─7ffd14f8-ee1d-11ea-0343-b54fb0333aea
+# ╠═7ffd14f8-ee1d-11ea-0343-b54fb0333aea
 # ╟─fa463b71-5aa4-44a3-a67b-6b0776236243
 # ╠═8a7d3cfd-6f19-43f0-ae16-d5a236f148e7
 # ╟─a34d1ad8-3776-4bc4-93e5-72cfffc54f15

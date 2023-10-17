@@ -65,6 +65,15 @@ function my_sum(v)
     return result
 end
 
+function extend(v::AbstractVector, i)
+    if i in v
+        return i
+    else
+        nearest_val, _ = findmin(abs.(v .- i))
+        return nearest_val[_]
+    end
+end
+
 
 function box_blur(v::AbstractArray, l)
     result_vector = []
@@ -77,4 +86,35 @@ function box_blur(v::AbstractArray, l)
         end
         push!(result_vector, mean(window))
     end
+end
+
+
+
+
+test_convolution = let
+    v = [1, 10, 100, 1000, 10000]
+    k = [1, 1, 0]
+    convolve(v, k)
+end
+
+
+x = [1, 10, 100]
+result = convolve(x, [0, 1, 1])
+shouldbe = [11, 110, 200]
+shouldbe2 = [2, 11, 110]
+
+function convolve(v::AbstractVector, k)
+    # get length of v and K
+    v_length = length(v)
+    k_length = length(k)
+    # we can use the extend function to cater for the boundaries
+    result_vector = []
+    for i in 1:v_length
+        window = []
+        for j in 1:k_length
+            push!(window, extend(v, i + j))
+        end
+        push!(result_vector, dot(window, k))
+    end
+    return result_vector
 end
