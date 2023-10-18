@@ -118,3 +118,23 @@ function convolve(v::AbstractVector, k)
     end
     return result_vector
 end
+
+# this is returning the correct result
+# this has a normalized kernel length of 1
+function box_blur_kernel(l)
+    return fill(1 / (2 * l + 1), 2 * l + 1)
+end
+
+
+gauss(x::Real; σ=1) = 1 / sqrt(2π * σ^2) * exp(-x^2 / (2 * σ^2))
+
+# sampling at each pixel at length 2n + 1
+function gaussian_kernel_1D(n; σ=1)
+    result = []
+    for i in -n:n
+        push!(result, gauss(i, σ=σ))
+    end
+    # normalize so that the sum is 1
+    return result / sum(result)
+
+end
