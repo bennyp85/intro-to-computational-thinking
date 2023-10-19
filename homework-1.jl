@@ -138,3 +138,24 @@ function gaussian_kernel_1D(n; σ=1)
     return result / sum(result)
 
 end
+
+# return wrong size of vector
+function convolve(v::AbstractVector, k::AbstractVector)
+    v_length = length(v)
+    k_length = length(k)
+    offset = floor(Int, k_length ÷ 2)
+
+    result_vector = OffsetArray{Float64}(undef, 1-offset:1-offset+v_length)
+
+    for i in 1-offset:1-offset+v_length
+        window = OffsetArray{Float64}(undef, -offset:offset)
+
+        for j in -offset:offset
+            window[j] = extend(v, i + j)
+        end
+
+        result_vector[i] = dot(window, k)
+    end
+
+    return result_vector
+end

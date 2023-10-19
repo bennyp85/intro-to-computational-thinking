@@ -328,8 +328,23 @@ md"""
 
 # ╔═╡ 7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
 function extend(M::AbstractMatrix, i, j)
-
-    return missing
+	nrows, ncols = size(M)
+    
+    # Handle row index
+    if i <= 0
+        i = 1
+	elseif i > nrows
+        i = nrows
+    end
+    
+    # Handle column index
+    if j <= 0
+        j = 1
+	elseif j > ncols
+        j = ncols
+    end
+    
+    return M[i, j]
 end
 
 # ╔═╡ 803905b2-ee09-11ea-2d52-e77ff79693b0
@@ -396,6 +411,7 @@ function convolve(v::AbstractVector, k::AbstractVector)
     v_length = length(v)
     k_length = length(k)
     offset = floor(k_length ÷ 2)
+	offset_array = []
     result_vector = []
     
     for i in 1:v_length
@@ -2237,7 +2253,7 @@ version = "17.4.0+0"
 # ╠═803905b2-ee09-11ea-2d52-e77ff79693b0
 # ╠═80479d98-ee09-11ea-169e-d166eef65874
 # ╠═805691ce-ee09-11ea-053d-6d2e299ee123
-# ╠═bcf98dfc-ee1b-11ea-21d0-c14439500971
+# ╟─bcf98dfc-ee1b-11ea-21d0-c14439500971
 # ╠═3492b164-7065-48e8-978b-6c96b965d376
 # ╠═02123165-2a0a-49a8-b7a9-458955523511
 # ╟─806e5766-ee0f-11ea-1efc-d753cd83d086
@@ -2252,7 +2268,7 @@ version = "17.4.0+0"
 # ╠═4f08ebe8-b781-4a32-a218-5ecd8338561d
 # ╟─808deca8-ee09-11ea-0ee3-1586fa1ce282
 # ╟─809f5330-ee09-11ea-0e5b-415044b6ac1f
-# ╠═e555a7e6-f11a-43ac-8218-6d832f0ce251
+# ╟─e555a7e6-f11a-43ac-8218-6d832f0ce251
 # ╠═302f0842-453f-47bd-a74c-7942d8c96485
 # ╟─ea435e58-ee11-11ea-3785-01af8dd72360
 # ╟─80ab64f4-ee09-11ea-29b4-498112ed0799
