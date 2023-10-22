@@ -159,3 +159,49 @@ function convolve(v::AbstractVector, k::AbstractVector)
 
     return result_vector
 end
+
+function extend(M::AbstractMatrix, i, j)
+    nrows, ncols = size(M)
+
+    # Handle row index
+    if i <= 0
+        i = 1
+    elseif i > nrows
+        i = nrows
+    end
+
+    # Handle column index
+    if j <= 0
+        j = 1
+    elseif j > ncols
+        j = ncols
+    end
+
+    return M[i, j]
+end
+
+# 2D convolution
+
+#👉 Implement a new method convolve(M, K) that applies a convolution to a 2D array M, using a 2D kernel K. Use your new method extend from the last exercise.
+
+function convolve(M::AbstractMatrix, K::AbstractMatrix)
+    nrows, ncols = size(M)
+    krows, kcols = size(K)
+    offset_row = floor(Int, krows ÷ 2)
+    offset_col = floor(Int, kcols ÷ 2)
+
+    # do not use Float64
+    result_matrix = OffsetArray{Float64}(undef, 1-offset_row:1-offset_row+nrows, 1-offset_col:1-offset_col+ncols)
+    for i in 1-offset_row:1-offset_row+nrows
+        for j in 1-offset_col:1-offset_col+ncols
+            window = OffsetArray{Float64}(undef, -offset_row:offset_row, -offset_col:offset_col)
+            for k in -offset_row:offset_row
+                for l in -offset_col:offset_col
+                    window[k, l] = extend(M, i + k, j + l)
+                end
+            end
+            result_matrix[i, j] = dot(window, K)
+        end
+    end
+    return result_matrix
+end

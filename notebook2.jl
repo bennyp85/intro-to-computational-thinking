@@ -30,7 +30,11 @@ begin
     using PlutoUI
     using HypertextLiteral
     using OffsetArrays
+	using ColorTypes
 end
+
+# ╔═╡ 8244c1d0-66c4-4ba4-9be3-af1326785b8e
+using ColorTypes: RGB, Gray, N0f8
 
 # ╔═╡ 83eb9ca0-ed68-11ea-0bc5-99a09c68f867
 md"_homework 2, version 3_"
@@ -326,21 +330,21 @@ md"""
 👉 Write a new method for `extend` that takes a matrix `M` and indices `i` and `j`, and returns the closest element of the matrix.
 """
 
-# ╔═╡ 7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
+# ╔═╡ aa7233ed-9728-4d08-b02b-8ed33ff2660b
 function extend(M::AbstractMatrix, i, j)
-	nrows, ncols = size(M)
+    nrows, ncols = size(M)
     
     # Handle row index
     if i <= 0
         i = 1
-	elseif i > nrows
+    elseif i > nrows
         i = nrows
     end
     
     # Handle column index
     if j <= 0
         j = 1
-	elseif j > ncols
+    elseif j > ncols
         j = ncols
     end
     
@@ -479,8 +483,69 @@ md"""
 
 # ╔═╡ 8b96e0bc-ee15-11ea-11cd-cfecea7075a0
 function convolve(M::AbstractMatrix, K::AbstractMatrix)
+    nrows, ncols = size(M)
+    krows, kcols = size(K)
+    offset_row = floor(Int, krows ÷ 2)
+    offset_col = floor(Int, kcols ÷ 2)
 
-    return missing
+    result_matrix = OffsetArray{RGB}(undef, 1-offset_row:1-offset_row+nrows, 1-offset_col:1-offset_col+ncols)
+    for i in 1-offset_row:1-offset_row+nrows
+        for j in 1-offset_col:1-offset_col+ncols
+            r_window, g_window, b_window = [], [], []
+            for k in -offset_row:offset_row
+                for l in -offset_col:offset_col
+                    pixel = extend(M, i + k, j + l)
+                    push!(r_window, red(pixel))
+                    push!(g_window, green(pixel))
+                    push!(b_window, blue(pixel))
+                end
+            end
+            r_result = dot(r_window, reshape(K, :))
+            g_result = dot(g_window, reshape(K, :))
+            b_result = dot(b_window, reshape(K, :))
+            result_matrix[i, j] = RGB(r_result, g_result, b_result)
+        end
+    end
+    return result_matrix
+end
+
+
+# ╔═╡ 5a5135c6-ee1e-11ea-05dc-eb0c683c2ce5
+md"_Let's test it out! 🎃_"
+
+# ╔═╡ 577c6daa-ee1e-11ea-1275-b7abc7a27d73
+test_image_with_border = [get(small_image, (i, j), Gray(0)) for (i, j) in Iterators.product(-1:7, -1:7)]
+
+# ╔═╡ 275a99c8-ee1e-11ea-0a76-93e3618c9588
+K_test = [
+    0 0 0
+    1/2 0 1/2
+    0 0 0
+]
+
+# ╔═╡ 153bd915-7547-4e96-b57a-de922e422bf8
+function convolve(M::AbstractMatrix{Gray}, K::AbstractMatrix)
+    nrows, ncols = size(M)
+    krows, kcols = size(K)
+    offset_row = floor(Int, krows ÷ 2)
+    offset_col = floor(Int, kcols ÷ 2)
+
+    # Initialize result_matrix as a 2D array with the same type as M
+    result_matrix = OffsetArray{Gray}(undef, 1-offset_row:1-offset_row+nrows, 1-offset_col:1-offset_col+ncols)
+
+    for i in 1-offset_row:1-offset_row+nrows
+        for j in 1-offset_col:1-offset_col+ncols
+            window = []
+            for k in -offset_row:offset_row
+                for l in -offset_col:offset_col
+                    push!(window, extend(M, i + k, j + l).val)  # Extract the numerical value from the Gray object
+                end
+            end
+            conv_result = dot(window, reshape(K, :))
+            result_matrix[i, j] = Gray(conv_result)  # Convert back to Gray
+        end
+    end
+    return result_matrix
 end
 
 # ╔═╡ 93284f92-ee12-11ea-0342-833b1a30625c
@@ -499,27 +564,14 @@ let
     colored_line(result)
 end
 
-# ╔═╡ 5a5135c6-ee1e-11ea-05dc-eb0c683c2ce5
-md"_Let's test it out! 🎃_"
+# ╔═╡ e7f8b41a-ee25-11ea-287a-e75d33fbd98b
+convolve(philip_head, K_test)
 
-# ╔═╡ 577c6daa-ee1e-11ea-1275-b7abc7a27d73
-test_image_with_border = [get(small_image, (i, j), Gray(0)) for (i, j) in Iterators.product(-1:7, -1:7)]
-
-# ╔═╡ 275a99c8-ee1e-11ea-0a76-93e3618c9588
-K_test = [
-    0 0 0
-    1/2 0 1/2
-    0 0 0
-]
-
-# ╔═╡ 42dfa206-ee1e-11ea-1fcd-21671042064c
+# ╔═╡ 49497ffa-1d0c-4614-9ccc-449d2fa0b0b1
 convolve(test_image_with_border, K_test)
 
 # ╔═╡ 6e53c2e6-ee1e-11ea-21bd-c9c05381be07
 md"_Edit_ `K_test` _to create your own test case!_"
-
-# ╔═╡ e7f8b41a-ee25-11ea-287a-e75d33fbd98b
-convolve(philip_head, K_test)
 
 # ╔═╡ 8a335044-ee19-11ea-0255-b9391246d231
 md"""
@@ -812,7 +864,7 @@ else
             still_missing()
         elseif isnothing(result)
             keep_working(md"Did you forget to write `return`?")
-        elseif result != 42 || extend(input, -1, 3) != 37
+		elseif result != 42 || extend(input, -1, 3) != 37
             keep_working()
         else
             correct()
@@ -1098,6 +1150,7 @@ Gray.(with_sobel_edge_detect(sobel_camera_image))
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+ColorTypes = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
@@ -1106,6 +1159,7 @@ OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
+ColorTypes = "~0.11.4"
 FileIO = "~1.16.1"
 HypertextLiteral = "~0.9.4"
 ImageIO = "~0.6.7"
@@ -1120,7 +1174,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.3"
 manifest_format = "2.0"
-project_hash = "c4b6adab283b18700d9d6b9efe83fc3fb44a163a"
+project_hash = "9d566921ed89da708a53c81b456ee186cb7e5f13"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -2303,7 +2357,8 @@ version = "17.4.0+0"
 # ╟─27847dc4-ee0a-11ea-0651-ebbbb3cfd58c
 # ╟─b01858b6-edf3-11ea-0826-938d33c19a43
 # ╟─7c1bc062-ee15-11ea-30b1-1b1e76520f13
-# ╠═7c2ec6c6-ee15-11ea-2d7d-0d9401a5e5d1
+# ╠═8244c1d0-66c4-4ba4-9be3-af1326785b8e
+# ╠═aa7233ed-9728-4d08-b02b-8ed33ff2660b
 # ╟─649df270-ee24-11ea-397e-79c4355e38db
 # ╟─9afc4dca-ee16-11ea-354f-1d827aaa61d2
 # ╠═cf6b05e2-ee16-11ea-3317-8919565cb56e
@@ -2321,13 +2376,14 @@ version = "17.4.0+0"
 # ╠═3cd535e4-ee26-11ea-2482-fb4ad43dda19
 # ╟─7c41f0ca-ee15-11ea-05fb-d97a836659af
 # ╠═8b96e0bc-ee15-11ea-11cd-cfecea7075a0
+# ╠═e7f8b41a-ee25-11ea-287a-e75d33fbd98b
 # ╟─0cabed84-ee1e-11ea-11c1-7d8a4b4ad1af
 # ╟─5a5135c6-ee1e-11ea-05dc-eb0c683c2ce5
 # ╟─577c6daa-ee1e-11ea-1275-b7abc7a27d73
 # ╠═275a99c8-ee1e-11ea-0a76-93e3618c9588
-# ╠═42dfa206-ee1e-11ea-1fcd-21671042064c
+# ╠═153bd915-7547-4e96-b57a-de922e422bf8
+# ╠═49497ffa-1d0c-4614-9ccc-449d2fa0b0b1
 # ╟─6e53c2e6-ee1e-11ea-21bd-c9c05381be07
-# ╠═e7f8b41a-ee25-11ea-287a-e75d33fbd98b
 # ╟─8a335044-ee19-11ea-0255-b9391246d231
 # ╟─79eb0775-3582-446b-996a-0b64301394d0
 # ╠═f4d9fd6f-0f1b-4dec-ae68-e61550cee790
