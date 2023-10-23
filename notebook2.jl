@@ -639,10 +639,24 @@ md"""
 👉 Write a function that applies a **Gaussian blur** to an image. Use your previous functions, and add cells to write helper functions as needed!
 """
 
-# ╔═╡ aad67fd0-ee15-11ea-00d4-274ec3cda3a3
-function with_gaussian_blur(image; σ=3, l=5)
+# ╔═╡ f6486ff5-a02b-4a51-9313-5634b9a267bd
+function gauss_2D_kernel(n; σ=1)
+    result = zeros(Float64, 2n+1, 2n+1)
+    for i in -n:n
+        for j in -n:n
+            result[i+n+1, j+n+1] = gauss(i, j; σ=σ)
+        end
+    end
+    return result / sum(result)
+end
 
-    return missing
+# ╔═╡ 28639f0b-3b3c-47b7-9989-fed061a766d8
+function with_gaussian_blur(image; σ=3, l=5)
+    # Generate 2D Gaussian kernel using gauss function
+    kernel_2D = gauss_2D_kernel(l, σ=σ)
+    
+    # Convolve the image with the 2D Gaussian kernel
+    return convolve(image, kernel_2D)
 end
 
 # ╔═╡ 8ae59674-ee18-11ea-3815-f50713d0fa08
@@ -2388,10 +2402,11 @@ version = "17.4.0+0"
 # ╟─79eb0775-3582-446b-996a-0b64301394d0
 # ╠═f4d9fd6f-0f1b-4dec-ae68-e61550cee790
 # ╟─7c50ea80-ee15-11ea-328f-6b4e4ff20b7e
-# ╠═aad67fd0-ee15-11ea-00d4-274ec3cda3a3
+# ╠═f6486ff5-a02b-4a51-9313-5634b9a267bd
+# ╠═28639f0b-3b3c-47b7-9989-fed061a766d8
 # ╟─9def5f32-ee15-11ea-1f74-f7e6690f2efa
 # ╟─8ae59674-ee18-11ea-3815-f50713d0fa08
-# ╟─94c0798e-ee18-11ea-3212-1533753eabb6
+# ╠═94c0798e-ee18-11ea-3212-1533753eabb6
 # ╠═a75701c4-ee18-11ea-2863-d3042e71a68b
 # ╠═96146b16-79ea-401f-b8ba-e05663a18bd8
 # ╠═2cc745ce-e145-4428-af3b-926fba271b67
