@@ -205,3 +205,30 @@ function convolve(M::AbstractMatrix, K::AbstractMatrix)
     end
     return result_matrix
 end
+
+# G{total} = sqrt{G_x^2 + G_y^2}
+
+```math
+G_x = \begin{bmatrix}
+1 & 0 & -1 \\
+2 & 0 & -2 \\
+1 & 0 & -1 \\
+\end{bmatrix};
+\qquad
+G_y = \begin{bmatrix}
+1 & 2 & 1 \\
+0 & 0 & 0 \\
+-1 & -2 & -1 \\
+\end{bmatrix} 
+```
+
+function with_sobel_edge_detect(image)
+    G_x = [1 0 -1; 2 0 -2; 1 0 -1]
+    G_y = [1 2 1; 0 0 0; -1 -2 -1]
+    G_x = G_x / sum(G_x)
+    G_y = G_y / sum(G_y)
+    G_x = convolve(image, G_x)
+    G_y = convolve(image, G_y)
+    G_total = sqrt.(G_x .^ 2 .+ G_y .^ 2)
+    return G_total
+end

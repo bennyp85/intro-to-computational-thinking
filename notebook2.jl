@@ -548,28 +548,6 @@ function convolve(M::AbstractMatrix{Gray}, K::AbstractMatrix)
     return result_matrix
 end
 
-# ╔═╡ 93284f92-ee12-11ea-0342-833b1a30625c
-test_convolution = let
-    v = [1, 10, 100, 1000, 10000]
-    k = [1, 1, 0]
-    convolve(v, k)
-end
-
-# ╔═╡ 5eea882c-ee13-11ea-0d56-af81ecd30a4a
-colored_line(test_convolution)
-
-# ╔═╡ 338b1c3f-f071-4f80-86c0-a82c17349828
-let
-    result = convolve(v, box_blur_kernel_test)
-    colored_line(result)
-end
-
-# ╔═╡ e7f8b41a-ee25-11ea-287a-e75d33fbd98b
-convolve(philip_head, K_test)
-
-# ╔═╡ 49497ffa-1d0c-4614-9ccc-449d2fa0b0b1
-convolve(test_image_with_border, K_test)
-
 # ╔═╡ 6e53c2e6-ee1e-11ea-21bd-c9c05381be07
 md"_Edit_ `K_test` _to create your own test case!_"
 
@@ -609,31 +587,6 @@ end
 # ╔═╡ a6149507-d5ba-45c1-896a-3487070d36ec
 colored_line(gaussian_kernel_1D(4; σ=1))
 
-# ╔═╡ 38eb92f6-ee13-11ea-14d7-a503ac04302e
-test_gauss_1D_a = let
-    k = gaussian_kernel_1D(gaussian_kernel_size_1D)
-
-    if k !== missing
-        convolve(v, k)
-    end
-end
-
-# ╔═╡ b424e2aa-ee14-11ea-33fa-35491e0b9c9d
-colored_line(test_gauss_1D_a)
-
-# ╔═╡ 24c21c7c-ee14-11ea-1512-677980db1288
-test_gauss_1D_b = let
-    v = create_bar()
-    k = gaussian_kernel_1D(gaussian_kernel_size_1D)
-
-    if k !== missing
-        convolve(v, k)
-    end
-end
-
-# ╔═╡ bc1c20a4-ee14-11ea-3525-63c9fa78f089
-colored_line(test_gauss_1D_b)
-
 # ╔═╡ 7c50ea80-ee15-11ea-328f-6b4e4ff20b7e
 md"""
 👉 Write a function that applies a **Gaussian blur** to an image. Use your previous functions, and add cells to write helper functions as needed!
@@ -648,15 +601,6 @@ function gauss_2D_kernel(n; σ=1)
         end
     end
     return result / sum(result)
-end
-
-# ╔═╡ 28639f0b-3b3c-47b7-9989-fed061a766d8
-function with_gaussian_blur(image; σ=3, l=5)
-    # Generate 2D Gaussian kernel using gauss function
-    kernel_2D = gauss_2D_kernel(l, σ=σ)
-    
-    # Convolve the image with the 2D Gaussian kernel
-    return convolve(image, kernel_2D)
 end
 
 # ╔═╡ 8ae59674-ee18-11ea-3815-f50713d0fa08
@@ -705,10 +649,108 @@ where each operation applies *element-wise* on the matrices.
 Use your previous functions, and add cells to write helper functions as needed!
 """
 
-# ╔═╡ 9eeb876c-ee15-11ea-1794-d3ea79f47b75
-function with_sobel_edge_detect(image)
+# ╔═╡ 50e7abc1-ab0c-49a4-96c7-71a3067b0db2
+function convolve(M::AbstractMatrix{<:ColorTypes.Gray}, K::AbstractMatrix)
+    nrows, ncols = size(M)
+    krows, kcols = size(K)
+    offset_row = floor(Int, krows ÷ 2)
+    offset_col = floor(Int, kcols ÷ 2)
 
-    return missing
+    result_matrix = OffsetArray{ColorTypes.Gray}(undef, 1-offset_row:1-offset_row+nrows, 1-offset_col:1-offset_col+ncols)
+    for i in 1-offset_row:1-offset_row+nrows
+        for j in 1-offset_col:1-offset_col+ncols
+            window = []
+            for k in -offset_row:offset_row
+                for l in -offset_col:offset_col
+                    pixel = extend(M, i + k, j + l)
+                    push!(window, pixel.val)  # Assuming pixel is of type ColorTypes.Gray
+                end
+            end
+            conv_result = dot(window, reshape(K, :))
+            result_matrix[i, j] = ColorTypes.Gray(conv_result)
+        end
+    end
+    return result_matrix
+end
+
+
+# ╔═╡ 93284f92-ee12-11ea-0342-833b1a30625c
+test_convolution = let
+    v = [1, 10, 100, 1000, 10000]
+    k = [1, 1, 0]
+    convolve(v, k)
+end
+
+# ╔═╡ 5eea882c-ee13-11ea-0d56-af81ecd30a4a
+colored_line(test_convolution)
+
+# ╔═╡ 338b1c3f-f071-4f80-86c0-a82c17349828
+let
+    result = convolve(v, box_blur_kernel_test)
+    colored_line(result)
+end
+
+# ╔═╡ 38eb92f6-ee13-11ea-14d7-a503ac04302e
+test_gauss_1D_a = let
+    k = gaussian_kernel_1D(gaussian_kernel_size_1D)
+
+    if k !== missing
+        convolve(v, k)
+    end
+end
+
+# ╔═╡ b424e2aa-ee14-11ea-33fa-35491e0b9c9d
+colored_line(test_gauss_1D_a)
+
+# ╔═╡ 24c21c7c-ee14-11ea-1512-677980db1288
+test_gauss_1D_b = let
+    v = create_bar()
+    k = gaussian_kernel_1D(gaussian_kernel_size_1D)
+
+    if k !== missing
+        convolve(v, k)
+    end
+end
+
+# ╔═╡ bc1c20a4-ee14-11ea-3525-63c9fa78f089
+colored_line(test_gauss_1D_b)
+
+# ╔═╡ e7f8b41a-ee25-11ea-287a-e75d33fbd98b
+convolve(philip_head, K_test)
+
+# ╔═╡ 49497ffa-1d0c-4614-9ccc-449d2fa0b0b1
+convolve(test_image_with_border, K_test)
+
+# ╔═╡ 28639f0b-3b3c-47b7-9989-fed061a766d8
+function with_gaussian_blur(image; σ=3, l=5)
+    # Generate 2D Gaussian kernel using gauss function
+    kernel_2D = gauss_2D_kernel(l, σ=σ)
+    
+    # Convolve the image with the 2D Gaussian kernel
+    return convolve(image, kernel_2D)
+end
+
+# ╔═╡ a3125fe7-aa69-4914-bed0-91547c8dbc7f
+function normalize_image(image)
+    min_val = minimum(image)
+    max_val = maximum(image)
+    return (image .- min_val) ./ (max_val - min_val)
+end
+
+# ╔═╡ 46e62a32-b83e-41a5-a7ed-48e380185d6a
+function with_sobel_edge_detect(image)
+    G_x = [1 0 -1; 2 0 -2; 1 0 -1]
+    G_y = [1 2 1; 0 0 0; -1 -2 -1]
+    
+    G_x_result = convolve(image, G_x)
+    G_y_result = convolve(image, G_y)
+    
+    G_total = sqrt.(G_x_result .^ 2 .+ G_y_result .^ 2)
+    G_total = normalize_image(G_total)
+    
+    println("Min: ", minimum(G_total), " Max: ", maximum(G_total))
+    
+    return G_total
 end
 
 # ╔═╡ 8ffe16ce-ee20-11ea-18bd-15640f94b839
@@ -2413,7 +2455,9 @@ version = "17.4.0+0"
 # ╟─d5ffc6ab-156b-4d43-ac3d-1947d0176e7f
 # ╟─f461f5f2-ee18-11ea-3d03-95f57f9bf09e
 # ╟─7c6642a6-ee15-11ea-0526-a1aac4286cdd
-# ╠═9eeb876c-ee15-11ea-1794-d3ea79f47b75
+# ╠═50e7abc1-ab0c-49a4-96c7-71a3067b0db2
+# ╠═a3125fe7-aa69-4914-bed0-91547c8dbc7f
+# ╠═46e62a32-b83e-41a5-a7ed-48e380185d6a
 # ╠═1a0324de-ee19-11ea-1d4d-db37f4136ad3
 # ╠═1bf94c00-ee19-11ea-0e3c-e12bc68d8e28
 # ╟─1ff6b5cc-ee19-11ea-2ca8-7f00c204f587
