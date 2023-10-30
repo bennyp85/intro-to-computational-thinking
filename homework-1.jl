@@ -232,3 +232,7 @@ function with_sobel_edge_detect(image)
     G_total = sqrt.(G_x .^ 2 .+ G_y .^ 2)
     return G_total
 end
+
+# find the values in sample_freqs with frequency 0
+#  map to alphabet
+unused_letters = map(i -> alphabet[i], findall(x -> x == 0, sample_freqs))

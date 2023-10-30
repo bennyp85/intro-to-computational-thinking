@@ -284,7 +284,7 @@ $(html"<br>")
 """
 
 # ╔═╡ 92bf9fd2-f9a5-11ea-25c7-5966e44db6c6
-unused_letters = ['a', 'b', 'c'] # replace with your answer
+unused_letters = map(i -> alphabet[i], findall(x -> x == 0, sample_freqs))
 
 # ╔═╡ 01215e9a-f9a9-11ea-363b-67392741c8d4
 md"""
