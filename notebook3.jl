@@ -355,22 +355,31 @@ end
 # ╔═╡ e91c6fd8-f930-11ea-01ac-476bbde79079
 md"""👉 What is the frequency of the combination `"th"`?"""
 
-# ╔═╡ 1b4c0c28-f9ab-11ea-03a6-69f69f7f90ed
-th_frequency = missing
+# ╔═╡ fbf9b2d2-5936-4f0e-b41d-682dfbc57ba4
+# Find the indices of "t" and "h" in the alphabet
+t_index = findfirst(isequal('t'), alphabet)
+
+# ╔═╡ ea86ba7b-87fb-4c21-bd57-0fe45cbc4d29
+h_index = findfirst(isequal('h'), alphabet)
+
+# ╔═╡ 8d190403-3fed-4cd6-921e-70637558e596
+# Use these indices to find the frequency of the "th" transition
+th_frequency = sample_freq_matrix[t_index, h_index]
 
 # ╔═╡ 1f94e0a2-f9ab-11ea-1347-7dd906ebb09d
 md"""👉 What about `"ht"`?"""
 
 # ╔═╡ 41b2df7c-f931-11ea-112e-ede3b16f357a
-ht_frequency = missing
+ht_frequency = sample_freq_matrix[findfirst(isequal('h'), alphabet), findfirst(isequal('t'), alphabet)]
 
 # ╔═╡ 1dd1e2f4-f930-11ea-312c-5ff9e109c7f6
 md"""
 👉 Write code to find which le**tt**ers appeared doubled in our sample.
 """
 
-# ╔═╡ 65c92cac-f930-11ea-20b1-6b8f45b3f262
-double_letters = ['a', 'b', 'c'] # replace with your answer
+# ╔═╡ 0eed5002-3be8-4f9a-ac4e-049da1487c8b
+# Assign the rounded elements to the double_letters variable
+double_letters = Set(alphabet[diag(sample_freq_matrix) .!= 0])
 
 # ╔═╡ 4582ebf4-f930-11ea-03b2-bf4da1a8f8df
 md"""
@@ -380,7 +389,14 @@ _You are free to do this partially by hand, partially using code, whatever is ea
 """
 
 # ╔═╡ 7898b76a-f930-11ea-2b7e-8126ec2b8ffd
-most_likely_to_follow_w = 'x' # replace with your answer
+begin
+	# Find the index of the maximum value in the sample_freq_matrix array
+	index = argmax(sample_freq_matrix[index_of_letter('w'), :])
+	
+	# Use this index to access the corresponding letter in the alphabet array
+	most_likely_to_follow_w = alphabet[index]
+	
+end
 
 # ╔═╡ 458cd100-f930-11ea-24b8-41a49f6596a0
 md"""
@@ -390,7 +406,7 @@ _You are free to do this partially by hand, partially using code, whatever is ea
 """
 
 # ╔═╡ bc401bee-f931-11ea-09cc-c5efe2f11194
-most_likely_to_precede_w = 'x' # replace with your answer
+most_likely_to_precede_w = alphabet[argmax(sample_freq_matrix[:, index_of_letter('w')])]
 
 # ╔═╡ 45c20988-f930-11ea-1d12-b782d2c01c11
 md"""
@@ -1628,20 +1644,22 @@ version = "17.4.0+0"
 # ╠═6896fef8-f9af-11ea-0065-816a70ba9670
 # ╟─39152104-fc49-11ea-04dd-bb34e3600f2f
 # ╟─e91c6fd8-f930-11ea-01ac-476bbde79079
-# ╠═1b4c0c28-f9ab-11ea-03a6-69f69f7f90ed
+# ╠═fbf9b2d2-5936-4f0e-b41d-682dfbc57ba4
+# ╠═ea86ba7b-87fb-4c21-bd57-0fe45cbc4d29
+# ╠═8d190403-3fed-4cd6-921e-70637558e596
 # ╟─1f94e0a2-f9ab-11ea-1347-7dd906ebb09d
 # ╠═41b2df7c-f931-11ea-112e-ede3b16f357a
 # ╟─489fe282-f931-11ea-3dcb-35d4f2ac8b40
 # ╟─1dd1e2f4-f930-11ea-312c-5ff9e109c7f6
-# ╠═65c92cac-f930-11ea-20b1-6b8f45b3f262
+# ╠═0eed5002-3be8-4f9a-ac4e-049da1487c8b
 # ╠═671525cc-f930-11ea-0e71-df9d4aae1c05
 # ╟─7711ecc5-9132-4223-8ed4-4d0417b5d5c1
 # ╟─4582ebf4-f930-11ea-03b2-bf4da1a8f8df
 # ╠═7898b76a-f930-11ea-2b7e-8126ec2b8ffd
-# ╟─a5fbba46-f931-11ea-33e1-054be53d986c
+# ╠═a5fbba46-f931-11ea-33e1-054be53d986c
 # ╟─458cd100-f930-11ea-24b8-41a49f6596a0
 # ╠═bc401bee-f931-11ea-09cc-c5efe2f11194
-# ╟─ba695f6a-f931-11ea-0fbb-c3ef1374270e
+# ╠═ba695f6a-f931-11ea-0fbb-c3ef1374270e
 # ╟─45c20988-f930-11ea-1d12-b782d2c01c11
 # ╠═58428158-84ac-44e4-9b38-b991728cd98a
 # ╠═4a0314a6-7dc0-4ee9-842b-3f9bd4d61fb1
