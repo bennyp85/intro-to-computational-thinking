@@ -253,33 +253,38 @@ show_pair_frequencies(transition_frequencies(first_sample))
 double_letter_frequencies = [transition_frequencies[i, i] for i in 1:length(alphabet)]
 
 begin
-	# Find the index of the maximum value in the sample_freq_matrix array
-	index = argmax(sample_freq_matrix[index_of_letter('w'), :])
-	
-	# Use this index to access the corresponding letter in the alphabet array
-	most_likely_to_follow_w = alphabet[index]
-	
+    # Find the index of the maximum value in the sample_freq_matrix array
+    index = argmax(sample_freq_matrix[index_of_letter('w'), :])
+
+    # Use this index to access the corresponding letter in the alphabet array
+    most_likely_to_follow_w = alphabet[index]
+
 end
 
 if !@isdefined(most_likely_to_follow_w)
-	not_defined(:most_likely_to_follow_w)
+    not_defined(:most_likely_to_follow_w)
 else
-	let
-		result = most_likely_to_follow_w
-		if result isa Missing
-			still_missing()
-		elseif !(result isa Char)
-			keep_working(md"Make sure that you return a `Char`. You might want to use the `alphabet` to index a character.")
-		elseif result == alphabet[map(alphabet) do c
-			sample_freq_matrix[index_of_letter('w'), index_of_letter(c)]
-				end |> argmax #= =#]
-			correct()
-		else
-			keep_working()
-		end
-	end
+    let
+        result = most_likely_to_follow_w
+        if result isa Missing
+            still_missing()
+        elseif !(result isa Char)
+            keep_working(md"Make sure that you return a `Char`. You might want to use the `alphabet` to index a character.")
+        elseif result == alphabet[map(alphabet) do c
+            sample_freq_matrix[index_of_letter('w'), index_of_letter(c)]
+        end|>argmax] #= =#
+            correct()
+        else
+            keep_working()
+        end
+    end
 end
 
-👉 Which letter is most likely to precede a W?
+# 👉 Which letter is most likely to precede a W?
 
-most_like_to_precede_w = alphabet[argmax(sample_freq_matrix[:, index_of_letter('w')])]
+# most_like_to_precede_w = alphabet[argmax(sample_freq_matrix[:, index_of_letter('w')])]
+
+# 👉 What is the sum of each row? What is the sum of each column? What is the sum of the matrix? How can we interpret these values?"
+row_sums = sum(sample_freq_matrix, dims=2)
+column_sums = sum(sample_freq_matrix, dims=1)
+matrix_sum = sum(sample_freq_matrix)

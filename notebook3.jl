@@ -413,17 +413,20 @@ md"""
 👉 What is the sum of each row? What is the sum of each column? What is the sum of the matrix? How can we interpret these values?"
 """
 
-# ╔═╡ 58428158-84ac-44e4-9b38-b991728cd98a
-row_sums = missing
-
-# ╔═╡ 4a0314a6-7dc0-4ee9-842b-3f9bd4d61fb1
-col_sums = missing
-
 # ╔═╡ cc62929e-f9af-11ea-06b9-439ac08dcb52
 row_col_answer = md"""
 
 Blablabla
 """
+
+# ╔═╡ 288acb96-a69a-4b13-a774-570a383ef023
+row_sums = sum(sample_freq_matrix, dims=2)
+
+# ╔═╡ 7d303ddf-0cc1-4f2d-b3a6-5ba94b556826
+column_sums = sum(sample_freq_matrix, dims=1)
+
+# ╔═╡ e9a8d5e3-1b0b-4052-9ce0-bf858f76b14c
+matrix_sum = sum(sample_freq_matrix)
 
 # ╔═╡ 2f8dedfc-fb98-11ea-23d7-2159bdb6a299
 md"""
@@ -1661,9 +1664,10 @@ version = "17.4.0+0"
 # ╠═bc401bee-f931-11ea-09cc-c5efe2f11194
 # ╠═ba695f6a-f931-11ea-0fbb-c3ef1374270e
 # ╟─45c20988-f930-11ea-1d12-b782d2c01c11
-# ╠═58428158-84ac-44e4-9b38-b991728cd98a
-# ╠═4a0314a6-7dc0-4ee9-842b-3f9bd4d61fb1
 # ╠═cc62929e-f9af-11ea-06b9-439ac08dcb52
+# ╠═288acb96-a69a-4b13-a774-570a383ef023
+# ╠═7d303ddf-0cc1-4f2d-b3a6-5ba94b556826
+# ╠═e9a8d5e3-1b0b-4052-9ce0-bf858f76b14c
 # ╟─d3d7bd9c-f9af-11ea-1570-75856615eb5d
 # ╟─2f8dedfc-fb98-11ea-23d7-2159bdb6a299
 # ╟─b7446f34-f9b1-11ea-0f39-a3c17ba740e5
