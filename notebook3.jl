@@ -510,8 +510,8 @@ The only question left is: How do we compare two matrices? When two matrices are
 
 # ╔═╡ 13c89272-f934-11ea-07fe-91b5d56dedf8
 function matrix_distance(A, B)
-
-	return missing # do something with A .- B
+    distance = sum(abs.(A .- B))
+	return distance
 end
 
 # ╔═╡ 7d60f056-f931-11ea-39ae-5fa18a955a77
@@ -551,6 +551,9 @@ emma = let
 	
 	raw_text[start_index:stop_index]
 end;
+
+# ╔═╡ b5cd149f-100c-4287-9a9a-0b52d249ced7
+emma
 
 # ╔═╡ cc42de82-fb5a-11ea-3614-25ef961729ab
 function splitwords(text)
@@ -621,8 +624,12 @@ ngrams([1, 2, 3, 42], 2) == bigrams([1, 2, 3, 42])
 
 # ╔═╡ 7be98e04-fb6b-11ea-111d-51c48f39a4e9
 function ngrams(words, n)
-	
-	return missing
+    # result will be an array of arrays
+    result = Vector{Vector{typeof(words[1])}}()
+    for i in 1:length(words) - n + 1
+        push!(result, words[i:i+n-1])
+    end
+    return result
 end
 
 # ╔═╡ 052f822c-fb7b-11ea-382f-af4d6c2b4fdb
@@ -691,11 +698,16 @@ Dict(
 """
 
 # ╔═╡ 8ce3b312-fb82-11ea-200c-8d5b12f03eea
+
 function word_counts(words::Vector)
 	counts = Dict()
-	
-	# your code here
-	
+	for word in words
+        if haskey(counts, word)
+            counts[word] += 1
+        else
+            counts[word] = 1
+        end
+    end
 	return counts
 end
 
@@ -708,7 +720,7 @@ md"""
 """
 
 # ╔═╡ 953363dc-fb84-11ea-1128-ebdfaf5160ee
-emma_count = missing
+emma_count = word_counts(emma_words)["Emma"]
 
 # ╔═╡ 294b6f50-fb84-11ea-1382-03e9ab029a2d
 md"""
@@ -738,7 +750,15 @@ If the same n-gram occurs multiple times (e.g. "said Emma laughing"), then the l
 function completion_cache(grams)
 	cache = Dict()
 	
-	# your code here
+	for gram in grams
+        key = gram[1:end-1]
+        value = gram[end]
+        if haskey(cache, key)
+            push!(cache[key], value)
+        else
+            cache[key] = [value]
+        end
+    end
 	
 	cache
 end
@@ -1670,7 +1690,7 @@ version = "17.4.0+0"
 # ╠═e9a8d5e3-1b0b-4052-9ce0-bf858f76b14c
 # ╟─d3d7bd9c-f9af-11ea-1570-75856615eb5d
 # ╟─2f8dedfc-fb98-11ea-23d7-2159bdb6a299
-# ╟─b7446f34-f9b1-11ea-0f39-a3c17ba740e5
+# ╠═b7446f34-f9b1-11ea-0f39-a3c17ba740e5
 # ╟─4f97b572-f9b0-11ea-0a99-87af0797bf28
 # ╟─46c905d8-f9b0-11ea-36ed-0515e8ed2621
 # ╟─4e8d327e-f9b0-11ea-3f16-c178d96d07d9
@@ -1693,6 +1713,7 @@ version = "17.4.0+0"
 # ╟─8c7606f0-fb93-11ea-0c9c-45364892cbb8
 # ╟─82e0df62-fb54-11ea-3fff-b16c87a7d45b
 # ╠═b7601048-fb57-11ea-0754-97dc4e0623a1
+# ╠═b5cd149f-100c-4287-9a9a-0b52d249ced7
 # ╟─cc42de82-fb5a-11ea-3614-25ef961729ab
 # ╠═d66fe2b2-fb5a-11ea-280f-cfb12b8296ac
 # ╠═4ca8e04a-fb75-11ea-08cc-2fdef5b31944
@@ -1716,7 +1737,7 @@ version = "17.4.0+0"
 # ╟─a9ffff9a-fb83-11ea-1efd-2fc15538e52f
 # ╟─808abf6e-fb84-11ea-0785-2fc3f1c4a09f
 # ╠═953363dc-fb84-11ea-1128-ebdfaf5160ee
-# ╟─b8af4d06-b38a-4675-9399-81fb5977f077
+# ╠═b8af4d06-b38a-4675-9399-81fb5977f077
 # ╟─294b6f50-fb84-11ea-1382-03e9ab029a2d
 # ╠═b726f824-fb5e-11ea-328e-03a30544037f
 # ╠═18355314-fb86-11ea-0738-3544e2e3e816

@@ -288,3 +288,132 @@ end
 row_sums = sum(sample_freq_matrix, dims=2)
 column_sums = sum(sample_freq_matrix, dims=1)
 matrix_sum = sum(sample_freq_matrix)
+
+
+# Our model will compare the transition frequencies of our mystery sample to those of our two language samples. The closest match will be our detected language.
+
+# The only question left is: How do we compare two matrices? When two matrices are almost equal, but not exactly, we want to quantify the distance between them.
+
+# 👉 Write a function called matrix_distance which takes 2 matrices of the same size and finds the distance between them by:
+
+# Subtracting corresponding elements
+
+# Finding the absolute value of the difference
+
+# Summing the differences
+
+function matrix_distance(A, B)
+    distance = sum(abs.(A .- B))
+    return distance
+end
+
+# write a paragraph in Spanish
+
+# 👉 Next, it's your turn to write a more general function ngrams that takes an array and a number 
+# , and returns all subsequences of length 
+# . For example:
+
+let
+    output = ngrams([1, 2, 3, 42], 2)
+
+    if output isa Missing
+        still_missing()
+    elseif !(output isa Vector{<:Vector})
+        keep_working(md"Make sure that `ngrams` returns an array of arrays.")
+    elseif output == [[1, 2], [2, 3], [3, 42]]
+        if ngrams([1, 2, 3], 1) == [[1], [2], [3]]
+            if ngrams([1, 2, 3], 3) == [[1, 2, 3]]
+                if ngrams(["a"], 1) == [["a"]]
+                    correct()
+                else
+                    keep_working(md"`ngrams` should work with any type, not just integers!")
+                end
+            else
+                keep_working(md"`ngrams(x, 3)` did not give a correct result.")
+            end
+        else
+            keep_working(md"`ngrams(x, 1)` did not give a correct result.")
+        end
+    else
+        keep_working(md"`ngrams(x, 2)` did not give the correct bigrams. Start out with the same code as `bigrams`.")
+    end
+end
+
+ngrams([1, 2, 3, 42], 3)
+
+[[1, 2, 3], [2, 3, 42]]
+
+function ngrams(words, n)
+    # result will be an array of arrays
+    result = Vector{Vector{typeof(words[1])}}()
+    for i in 1:length(words)-n+1
+        push!(result, words[i:i+n-1])
+    end
+    return result
+end
+
+function word_counts(words::Vector)
+    counts = Dict()
+    for word in words
+        if haskey(counts, word)
+            counts[word] += 1
+        else
+            counts[word] = 1
+        end
+    end
+
+    return counts
+end
+
+
+
+
+# count how many times the word "Emma" apprears in the text
+
+emma_count = word_counts(emma_words)
+
+# Great! Let's get back to our n-grams. For the purpose of generating text, we are going to store a completion cache. This is a dictionary where each key is an 
+# -gram, and the corresponding value is the vector of all those words which can complete it to an 
+# -gram. Let's look at an example:
+
+let
+    trigrams = ngrams(split("to be or not to be that is the question", " "), 3)
+    cache = completions_cache(trigrams)
+    cache == Dict(
+        ["to", "be"] => ["or", "that"],
+        ["be", "or"] => ["not"],
+        ["or", "not"] => ["to"],
+        ...
+    )
+end
+
+# So for trigrams the keys are the first 
+#     words of each trigram, and the values are arrays containing every third word of those trigrams.
+
+#    If the same n-gram occurs multiple times (e.g. "said Emma laughing"), then the last word ("laughing") should also be stored multiple times. This will allow us to generate trigrams with the same frequencies as the original text.
+
+#    👉 Write the function completion_cache, which takes an array of ngrams (i.e. an array of arrays of words, like the result of your ngram function), and returns a dictionary like described above.
+
+
+function completion_cache(grams)
+    cache = Dict()
+
+    for gram in grams
+        key = gram[1:end-1]
+        value = gram[end]
+        if haskey(cache, key)
+            push!(cache[key], value)
+        else
+            cache[key] = [value]
+        end
+    end
+
+    cache
+end
+
+let
+    trigrams = ngrams(split("to be or not to be that is the question", " "), 3)
+    completion_cache(trigrams)
+end
+
+completion_cache(ngrams_circular(forest_words, 3))
